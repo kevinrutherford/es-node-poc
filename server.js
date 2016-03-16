@@ -21,7 +21,7 @@ readModel.handleEvents({
   }
 })
 
-readModel.get({
+readModel.endpoint({
   path:'/',
   handler: () => ({
     _links: {
@@ -31,12 +31,12 @@ readModel.get({
   })
 })
 
-readModel.get({
+readModel.endpoint({
   path:'/uniqueeventtypes',
   handler: () => uniqueEventTypes
 })
 
-readModel.get({
+readModel.endpoint({
   path: '/organisations',
   handler: () => ({
     count: Object.keys(organisations).length,

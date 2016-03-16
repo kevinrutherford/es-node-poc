@@ -10,11 +10,7 @@ server.connection({
   port: process.env.PORT
 })
 
-var validateCredentials = function(req, decoded, cb) {
-  return cb(null, true, decoded)
-}
-
-server.get = (opts) => server.route({
+server.endpoint = (opts) => server.route({
   method: 'GET',
   path: opts.path,
   handler: (request, reply) => reply(JSON.stringify(opts.handler(), null, 2))
