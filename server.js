@@ -1,14 +1,14 @@
-var readModel = require('./readModel');
+var readModel = require('./readModel')
 
-var uniqueEventTypes = {};
-var organisations = {};
+var uniqueEventTypes = {}
+var organisations = {}
 
 readModel.onAnyEvent(function(evt) {
   if(!uniqueEventTypes[evt.eventType])
-    uniqueEventTypes[evt.eventType] = {count:0};
+    uniqueEventTypes[evt.eventType] = {count:0}
 
-  uniqueEventTypes[evt.eventType].count++;
-});
+  uniqueEventTypes[evt.eventType].count++
+})
 
 readModel.handleEvents({
   organisationCreated: function(data) {
@@ -18,11 +18,11 @@ readModel.handleEvents({
   OrganisationCreated_v1: function(data) {
     if(!organisations[data.streamId])
       organisations[data.streamId] = {code: data.code}
-  }  
-});
+  }
+})
 
 readModel.get({
-  path:'/', 
+  path:'/',
   handler: function () {
     return {
       _links: {
@@ -31,14 +31,14 @@ readModel.get({
       }
     }
   }
-});
+})
 
 readModel.get({
-  path:'/uniqueeventtypes', 
+  path:'/uniqueeventtypes',
   handler: function () {
-    return uniqueEventTypes;
+    return uniqueEventTypes
   }
-});
+})
 
 readModel.get({
   path: '/organisations',
@@ -46,10 +46,10 @@ readModel.get({
     return {
       count: Object.keys(organisations).length,
       organisations: organisations
-    };
+    }
   }
-});
+})
 
-readModel.subscribeToEvents();
+readModel.subscribeToEvents()
 
-module.exports = readModel;
+module.exports = readModel

@@ -1,0 +1,25 @@
+{
+  "parser": "babel-eslint",
+
+  "extends": "eslint:recommended",
+
+  "ecmaFeatures": {
+    "blockBindings": true,
+    "forOf": true
+  },
+
+  "env": {
+    "browser": true,
+    "es6": true,
+    "mocha": true,
+    "node": true,
+    "jquery": true
+  },
+
+  "rules": {
+    "indent": [1, 2, {"SwitchCase": 1}],
+    "no-console": 1,
+    "no-unexpected-multiline": 2,
+    "semi": [1, 'never']
+  }
+}
