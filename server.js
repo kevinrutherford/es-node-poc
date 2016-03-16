@@ -23,31 +23,25 @@ readModel.handleEvents({
 
 readModel.get({
   path:'/',
-  handler: function () {
-    return {
-      _links: {
-        getOrganisations: "/organisations",
-        getUniqueEventTypes: "/uniqueeventtypes"
-      }
+  handler: () => ({
+    _links: {
+      getOrganisations: "/organisations",
+      getUniqueEventTypes: "/uniqueeventtypes"
     }
-  }
+  })
 })
 
 readModel.get({
   path:'/uniqueeventtypes',
-  handler: function () {
-    return uniqueEventTypes
-  }
+  handler: () => uniqueEventTypes
 })
 
 readModel.get({
   path: '/organisations',
-  handler: function() {
-    return {
-      count: Object.keys(organisations).length,
-      organisations: organisations
-    }
-  }
+  handler: () => ({
+    count: Object.keys(organisations).length,
+    organisations: organisations
+  })
 })
 
 readModel.subscribeToEvents()

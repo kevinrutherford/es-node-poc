@@ -8,7 +8,7 @@ var totalNumberOfEvents = 0
 var lastPollTimestamp = "Not yet polling"
 var handleEvent
 
-function getNextPageUri (evt) {
+function getNextPageUri(evt) {
   var links = evt.links.filter(link => link.relation === 'previous')
   return links.length === 0 ? null : links[0].uri
 }
@@ -27,21 +27,21 @@ var getNextEvents = function(uri, etagOfLastPage) {
       password: config.password
     }
   }, function (err, response, bodyString) {
-    if(err)
+    if (err)
       throw err
 
-    if(response.statusCode === 304){
+    if (response.statusCode === 304){
       lastPollTimestamp = new Date()
       getNextEvents(uri, etagOfLastPage)
     } else {
-      try{
+      try {
         var body = JSON.parse(bodyString)
       } catch(ex) {
         console.log("Error parsing bodyString>" + bodyString + "<")
         throw ex
       }
 
-      if(body.entries.length === 0) {
+      if (body.entries.length === 0) {
         hasCaughtUp = true
         timeTakenToCatchUp = (new Date() - timeStarted) / 1000
         getNextEvents(uri, response.headers.etag)

@@ -1,7 +1,7 @@
 var Hapi = require('hapi')
 var subscriber = require('./event-store-subscriber')
 
-if(!process.env.PORT)
+if (!process.env.PORT)
   throw "PORT env var not set!"
 
 var server = new Hapi.Server()
@@ -14,39 +14,28 @@ var validateCredentials = function(req, decoded, cb) {
   return cb(null, true, decoded)
 }
 
-server.get = function(opts) {
-  server.route({
-    method: 'GET',
-    path: opts.path,
-    handler: function (request, reply) {
-      reply(opts.handler())
-    }
-  })
-}
+server.get = (opts) => server.route({
+  method: 'GET',
+  path: opts.path,
+  handler: (request, reply) => reply(JSON.stringify(opts.handler(), null, 2))
+})
 
 server.route({
   method: 'GET',
-  path:'/info',
-  handler: function (request, reply) {
-    reply(subscription.info())
-  }
+  path: '/info',
+  handler: (request, reply) => reply(JSON.stringify(subscription.info(), null, 2))
 })
 
 var handleAnything
-server.onAnyEvent = function(handler) {
-  handleAnything = handler
-}
+server.onAnyEvent = (handler) => handleAnything = handler
 
 var handlers
-server.handleEvents = function(eventHandlers) {
-  handlers = eventHandlers
-}
+server.handleEvents = (eventHandlers) => handlers = eventHandlers
 
 var subscription = subscriber(function(evt) {
-  if(handleAnything)
+  if (handleAnything)
     handleAnything(evt)
-
-  if(handlers[evt.eventType]) {
+  if (handlers[evt.eventType]) {
     var eventData = JSON.parse(evt.data)
     eventData.streamId = evt.streamId
     handlers[evt.eventType](eventData)
@@ -55,7 +44,7 @@ var subscription = subscriber(function(evt) {
 
 server.subscribeToEvents = function() {
   server.start(function (err) {
-    if(err)
+    if (err)
       throw err
     console.log('Server running at:', server.info.uri)
     subscription.start()
