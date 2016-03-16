@@ -22,7 +22,7 @@ readModel.handleEvents({
 })
 
 readModel.endpoint({
-  path:'/',
+  path: '/',
   handler: () => ({
     _links: {
       getOrganisations: "/organisations",
@@ -32,7 +32,7 @@ readModel.endpoint({
 })
 
 readModel.endpoint({
-  path:'/uniqueeventtypes',
+  path: '/uniqueeventtypes',
   handler: () => uniqueEventTypes
 })
 

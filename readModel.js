@@ -5,15 +5,10 @@ if (!process.env.PORT)
   throw "PORT env var not set!"
 
 var server = new Hapi.Server()
+
 server.connection({
   host: '0.0.0.0',
   port: process.env.PORT
-})
-
-server.endpoint = (opts) => server.route({
-  method: 'GET',
-  path: opts.path,
-  handler: (request, reply) => reply(JSON.stringify(opts.handler(), null, 2))
 })
 
 server.route({
@@ -22,11 +17,8 @@ server.route({
   handler: (request, reply) => reply(JSON.stringify(subscription.info(), null, 2))
 })
 
-var handleAnything
-server.onAnyEvent = (handler) => handleAnything = handler
-
+var handleAnything = () => { }
 var handlers
-server.handleEvents = (eventHandlers) => handlers = eventHandlers
 
 var subscription = subscriber(function(evt) {
   if (handleAnything)
@@ -38,13 +30,25 @@ var subscription = subscriber(function(evt) {
   }
 })
 
-server.subscribeToEvents = function() {
-  server.start(function (err) {
-    if (err)
-      throw err
-    console.log('Server running at:', server.info.uri)
-    subscription.start()
-  })
-}
+module.exports = {
 
-module.exports = server
+  endpoint: (opts) => server.route({
+    method: 'GET',
+    path: opts.path,
+    handler: (request, reply) => reply(JSON.stringify(opts.handler(), null, 2))
+  }),
+
+  onAnyEvent: (handler) => handleAnything = handler,
+
+  handleEvents: (eventHandlers) => handlers = eventHandlers,
+
+  subscribeToEvents: function() {
+    server.start(function (err) {
+      if (err)
+        throw err
+      console.log('Server running at:', server.info.uri)
+      subscription.start()
+    })
+  }
+
+}
