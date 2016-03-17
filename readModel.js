@@ -15,8 +15,7 @@ var handleAnything = () => { }
 var handlers
 
 var subscription = subscriber(function(evt) {
-  if (handleAnything)
-    handleAnything(evt)
+  handleAnything(evt)
   if (handlers[evt.eventType]) {
     var eventData = JSON.parse(evt.data)
     eventData.streamId = evt.streamId
