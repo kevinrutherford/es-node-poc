@@ -11,12 +11,6 @@ server.connection({
   port: process.env.PORT
 })
 
-server.route({
-  method: 'GET',
-  path: '/info',
-  handler: (request, reply) => reply(JSON.stringify(subscription.info(), null, 2))
-})
-
 var handleAnything = () => { }
 var handlers
 
@@ -28,6 +22,12 @@ var subscription = subscriber(function(evt) {
     eventData.streamId = evt.streamId
     handlers[evt.eventType](eventData)
   }
+})
+
+server.route({
+  method: 'GET',
+  path: '/info',
+  handler: (request, reply) => reply(JSON.stringify(subscription.info(), null, 2))
 })
 
 module.exports = {
